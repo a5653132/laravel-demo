@@ -7,19 +7,22 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use App\Mail\DeployEmail;
+
 
 class SendMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $email;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($email)
     {
-
+        $this->email = $email;
     }
 
     /**
@@ -30,5 +33,6 @@ class SendMessage implements ShouldQueue
     public function handle()
     {
         //
+        \Mail::to($this->email)->send(new DeployEmail());
     }
 }
